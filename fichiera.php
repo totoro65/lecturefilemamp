@@ -1,20 +1,15 @@
 <?php
-
-/*
- * This file is part of the OpenClassRoom PHP Object Course.
- *
- * (c) Anthony Gast <anthonygast19@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+/* 1665806-Programmez-en-oriente-objet-PHP
+*TP P2C2
+*Dans cet exercice, le code de la salle d'attente (la classe Lobby) existe ainsi que le code d'un joueur (la classe Player). Lorsqu'un joueur s'enregistre dans le Lobby, il devient un *Joueur en Attente. Un joueur en attente possède une propriété range qui est un entier. Le but de cette propriété, est d'accroitre la portée de la recherche d'un adversaire, lorsqu'aucun *ne correspond au niveau du joueur. Le but étant de trouver un adversaire quitte à ce qu'il soit plus faible ou plus fort.
+*Votre tâche est de créer une classe QueuingPlayer qui étends la classe Player. Et de lui ajouter la propriété range. */
 
 declare(strict_types=1);
 
 class Lobby
 {
     /** @var array<AGPlayer> */
-    public array $AGPlayers = [];
+    public array $agPlayers = [];
 
     public function findOponents(AGPlayer $player): array
     {
@@ -30,7 +25,7 @@ class Lobby
 
     public function addPlayer(Player $player): void
     {
-        $this->queuingPlayers[] = new AGPlayer($player);
+        $this->agPlayers[] = new AGPlayer($player);
     }
 
     public function addPlayers(Player ...$players): void
@@ -68,13 +63,30 @@ class Player
     }
 }
 
+class QueuingPlayer extends Player
+{
+    public function __construct(Player $player, protected int $range = 1)
+    {
+        parent::__construct($player->getName(), $player->getRatio());
+    }
+
+    public function getRange(): int
+    {
+        return $this->range;
+    }
+
+    public function upgradeRange(): void
+    {
+        $this->range = min($this->range + 1, 40);
+    }
+}
+
 $greg = new Player('greg', 400);
 $jade = new Player('jade', 476);
 
 $lobby = new Lobby();
 $lobby->addPlayers($greg, $jade);
 
-var_dump($lobby->findOponents($lobby->AGPPlayers[0]));
+var_dump($lobby->findOponents($lobby->agPlayers[0]));
 
 exit(0);
-© 2021 GitHub, Inc.
